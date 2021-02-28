@@ -1,12 +1,31 @@
-import { Table, Column, Model, PrimaryKey } from 'sequelize-typescript'
-import { DataTypes } from 'sequelize'
+import { User } from "./models";
+import { Sequelize } from "sequelize-typescript";
 
-@Table({ modelName: 'users', timestamps: true, paranoid: true })
-export class User extends Model<User> {
-    @PrimaryKey
-    @Column(DataTypes.UUIDV4)
-    uuid!: string
+const sequelize =  new Sequelize({
+    dialect: 'postgres',
+    database: 'dbtest',
+    host: 'localhost',
+    username: 'testuser',
+    password: 'password',
+    port: 5432,
+    ssl: false,
+    // dialect: 'sqlite',
+    // storage: 'database.sqlite',
+    models: [User]
+});
 
-    @Column(DataTypes.STRING)
-    name!: string
-}
+(async () => {
+    let users = await User.findAll();
+    for (let user of users) {
+        console.log(user.name);
+    }
+
+    
+    process.exit(1);
+
+
+})();
+
+// sequelize.addModels([User])
+
+
